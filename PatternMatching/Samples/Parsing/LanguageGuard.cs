@@ -24,49 +24,16 @@
 * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS      *
 * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.                       *
 \************************************************************************************/
-namespace WellGuarded
+namespace WellGuarded.Samples.Parsing
 {
     using System;
-
-    /// <summary>
-    /// Guard class that provides the base for pattern matching
-    /// </summary>
-    public class Guard
-    {
-        /// <summary>
-        /// <see cref="System.Func<T>"/> that returns a bool and acts
-        /// as the test condition for the pattern matching
-        /// </summary>
-        public Func<bool> Predicate { get; set; }
-
-        /// <summary>
-        /// <see cref="System.Func<T>"/> that returns an object and
-        /// acts as the method to perform if the predicate returns
-        /// true
-        /// </summary>
-        public Func<object> Action { get; set; }
-
-        /// <summary>
-        /// Overriding the | operator to provide "standard" pattern
-        /// matching syntax
-        /// </summary>
-        /// <param name="a">The first item in the pattern matching</param>
-        /// <param name="b">The second item in the pattern matching</param>
-        /// <returns>Returns the first guard that is true or else
-        /// returns null</returns>
-        public static Guard operator |(Guard a, Guard b)
+    using WellGuarded;
+	public class LanguageGuard : Guard
+	{
+        public LanguageGuard(Func<bool> pred, Func<object> action)
         {
-            Guard c = null;
-            if (a.Predicate.Invoke())
-            {
-                c = a;
-            }
-            else if (b.Predicate.Invoke())
-            {
-                c = b;
-            }
-
-            return c;
+            this.Predicate = pred;
+            this.Action = action;
         }
-    }
+	}
 }
