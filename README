@@ -1,4 +1,4 @@
-well-guarded
+##well-guarded
 ============
 
 well-guarded is an attempt to bring pattern matching to C#. While there are a few
@@ -6,7 +6,7 @@ well-guarded is an attempt to bring pattern matching to C#. While there are a fe
 lacking in C#. This is an attempt to gracefully bring it to C#
 
 
-How it works
+##How it works
 ============
 
 well-guarded uses closures,delegates (in the form of Func<T>) and operator overloading to bring
@@ -14,12 +14,111 @@ the experience of pattern matching to the C# language. By inheriting from the Gu
 providing your own delagates that close over the variables that you are test, you will be able to mimic
 pattern matching. Examples are to follow.
 
-Requirements
+##Requirements
 ============
 This is created in Visual Studio 2010 and .NET 4.0, however, it can run on .NET 3.5 It will
 not run on any .NET version before that since it uses Func<T> which was introduced in .NET 3.5 
 
-Licensing
+##Licensing
 =========
 This is licensed as BSD (modified). If you end up using this, it would be super cool if you could let me know. I
 would love to be able to list people/projects that use this library.
+
+
+##Examples
+==========
+
+For an example I will use create a little parser that will turn a string into either a number class or character class.
+First we setup the classes:
+
+```C#
+public interface IType {
+    object GetValue();
+}
+
+public class Number : IType {
+    private int val;
+
+    public Number(int value) {
+        val = value;
+    }
+
+    public object GetValue() {
+        return val;
+    }
+}
+
+public class Character : IType {
+    private char val;
+
+    public Character(char value) {
+        val = value;
+    }
+    
+    public object GetValue() {
+        return val;
+    }
+}
+```
+
+Now we have to define our Guard, so we will inherit from the WellGuarded.Guard class:
+
+```C#
+
+public class LanguageGuard : Guard
+{
+    public LanguageGuard(Func<bool> pred, Func<object> act)
+    {
+         Predicate = pred;
+         Action = act;
+    }
+}
+
+```
+
+From there we can go ahead and use our new Guard and pattern match!
+
+```C#
+static void Main(string[] args) {
+    List<IType> tokens = new List<IType>();
+    string testString = "This is the test string5235";
+    
+    // iterate character by character 
+    foreach(char c in testString) {
+        // create conditional to check if int
+        Func<bool> intCheck = () => {
+            return char.IsDigit(c);
+        };
+
+        // Action to perform if the conditional is true
+        Func<object> intAction = () => {
+            return new Number((int)c);
+        };
+
+        // create condition to check if character (defined here as not digit)
+        Func<bool> charCheck =  () => {
+            return !char.IsDigit(c);
+        }
+
+        // create action to handle the character
+        Func<object> charAction = () => {
+            return new Character(c);
+        }
+          
+        // create our guards
+        LanguageGuard intGuard = new LanguageGuard(intCheck,intAction);
+        LanguageGuard charGuard = new LanguageGuard(charCheck,charAction);
+
+        // now pattern match
+        Guard result = intGuard | charGuard;
+        
+        // check to make sure one of the results was true
+        if(result != null) {
+            // call the action and add to the token list
+            tokens.Add((IType)result.Action.Invoke());
+        }
+    }
+}
+```
+
+That is all there is to it. There is some setting up, but once everything is setup, you can have pattern matching in C#.
