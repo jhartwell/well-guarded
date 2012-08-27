@@ -31,7 +31,7 @@ would love to be able to list people/projects that use this library.
 For an example I will use create a little parser that will turn a string into either a number class or character class.
 First we setup the classes:
 
-```C#
+
 public interface IType {
     object GetValue();
 }
@@ -59,11 +59,10 @@ public class Character : IType {
         return val;
     }
 }
-```
+
 
 Now we have to define our Guard, so we will inherit from the WellGuarded.Guard class:
 
-```C#
 
 public class LanguageGuard : Guard
 {
@@ -74,11 +73,11 @@ public class LanguageGuard : Guard
     }
 }
 
-```
+
 
 From there we can go ahead and use our new Guard and pattern match!
 
-```C#
+
 static void Main(string[] args) {
     List<IType> tokens = new List<IType>();
     string testString = "This is the test string5235";
@@ -119,6 +118,6 @@ static void Main(string[] args) {
         }
     }
 }
-```
+
 
 That is all there is to it. There is some setting up, but once everything is setup, you can have pattern matching in C#.
