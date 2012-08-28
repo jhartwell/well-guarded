@@ -1,4 +1,4 @@
-##well-guarded
+well-guarded
 ============
 
 well-guarded is an attempt to bring pattern matching to C#. While there are a few
@@ -6,7 +6,7 @@ well-guarded is an attempt to bring pattern matching to C#. While there are a fe
 lacking in C#. This is an attempt to gracefully bring it to C#
 
 
-##How it works
+How it works
 ============
 
 well-guarded uses closures,delegates (in the form of Func<T>) and operator overloading to bring
@@ -14,18 +14,18 @@ the experience of pattern matching to the C# language. By inheriting from the Gu
 providing your own delagates that close over the variables that you are test, you will be able to mimic
 pattern matching. Examples are to follow.
 
-##Requirements
+Requirements
 ============
 This is created in Visual Studio 2010 and .NET 4.0, however, it can run on .NET 3.5 It will
 not run on any .NET version before that since it uses Func<T> which was introduced in .NET 3.5 
 
-##Licensing
+Licensing
 =========
 This is licensed as BSD (modified). If you end up using this, it would be super cool if you could let me know. I
 would love to be able to list people/projects that use this library.
 
 
-##Examples
+Examples
 ==========
 
 For an example I will use create a little parser that will turn a string into either a number class or character class.
@@ -91,7 +91,7 @@ static void Main(string[] args) {
 
         // Action to perform if the conditional is true
         Func<object> intAction = () => {
-            return new Number((int)c);
+            return new Number(int.Parse(c));
         };
 
         // create condition to check if character (defined here as not digit)
